@@ -1,0 +1,13 @@
+package io.github.LeoRam0s.intelbras_event_engine;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class IntelbrasEventEngineApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(IntelbrasEventEngineApplication.class, args);
+	}
+
+}
