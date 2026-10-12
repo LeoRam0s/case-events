@@ -1,5 +1,5 @@
 CREATE TABLE tb_consumed_events (
-    pk_event_id UUID PRIMARY KEY,
+    pk_event_id VARCHAR(64) PRIMARY KEY,
     device_id VARCHAR(100) NOT NULL,
     message_type VARCHAR(50) NOT NULL,
     payload JSONB NOT NULL,
