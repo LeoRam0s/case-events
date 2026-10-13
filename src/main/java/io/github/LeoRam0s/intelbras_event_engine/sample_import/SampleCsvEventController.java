@@ -40,7 +40,11 @@ public class SampleCsvEventController {
     @ExceptionHandler(CsvSampleImportException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, String> handleCsvSampleImport(Exception exception) {
-        log.error("Failed to process the sample CSV", exception);
+        log.atError()
+                .addKeyValue("outcome", "failure")
+                .addKeyValue("errorType", exception.getClass().getSimpleName())
+                .setCause(exception)
+                .log("Failed to process the sample CSV");
         return Map.of("error", "Não foi possível processar o SampleCSV de eventos");
     }
 }

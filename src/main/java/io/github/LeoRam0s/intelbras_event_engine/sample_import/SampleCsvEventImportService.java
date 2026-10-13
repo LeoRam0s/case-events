@@ -59,7 +59,11 @@ public class SampleCsvEventImportService {
                 try {
                     event = parseRecord(record);
                 } catch (RuntimeException exception) {
-                    log.warn("Skipping invalid CSV line {}: {}", parser.getCurrentLineNumber(), exception.getMessage());
+                    log.atWarn()
+                            .addKeyValue("lineNumber", parser.getCurrentLineNumber())
+                            .addKeyValue("errorType", exception.getClass().getSimpleName())
+                            .addKeyValue("outcome", "skipped")
+                            .log("Skipping invalid CSV line");
                     continue;
                 }
 

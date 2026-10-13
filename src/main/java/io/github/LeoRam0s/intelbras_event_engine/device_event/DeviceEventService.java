@@ -18,7 +18,9 @@ public class DeviceEventService {
 
     @Transactional
     public boolean process(DeviceEventDto event) {
-        log.debug("Processing event eventId={}", event.eventId());
+        log.atDebug()
+                .addKeyValue("eventId", event.eventId())
+                .log("Processing event");
 
         return deviceEventRepository.insertConsumeEventIfAbsent(event);
     }
