@@ -20,3 +20,73 @@ groups:
         annotations:
           summary: A device event was sent to the dead-letter topic
           description: At least one event was successfully recovered to the DLT during the last five minutes.
+
+      - alert: IntelbrasProcessCpuHigh
+        expr: process_cpu_usage{job="intelbras-event-engine"} > 0.8
+        for: 5m
+        labels:
+          service: intelbras-event-engine
+          severity: warning
+        annotations:
+          summary: Intelbras Event Engine process CPU is high
+          description: Process CPU usage has remained above 80% for five minutes.
+
+      - alert: IntelbrasJvmHeapHighWarning
+        expr: (sum by(instance) (jvm_memory_used_bytes{job="intelbras-event-engine",area="heap"}) / sum by(instance) (jvm_memory_max_bytes{job="intelbras-event-engine",area="heap"}) > 0.85) and (sum by(instance) (jvm_memory_used_bytes{job="intelbras-event-engine",area="heap"}) / sum by(instance) (jvm_memory_max_bytes{job="intelbras-event-engine",area="heap"}) <= 0.95)
+        for: 5m
+        labels:
+          service: intelbras-event-engine
+          severity: warning
+        annotations:
+          summary: JVM heap utilization is high
+          description: JVM heap utilization has remained above 85% for five minutes.
+
+      - alert: IntelbrasJvmHeapHighCritical
+        expr: sum by(instance) (jvm_memory_used_bytes{job="intelbras-event-engine",area="heap"}) / sum by(instance) (jvm_memory_max_bytes{job="intelbras-event-engine",area="heap"}) > 0.95
+        for: 2m
+        labels:
+          service: intelbras-event-engine
+          severity: critical
+        annotations:
+          summary: JVM heap utilization is critical
+          description: JVM heap utilization has remained above 95% for two minutes.
+
+      - alert: IntelbrasHikariPoolSaturated
+        expr: hikaricp_connections_active{job="intelbras-event-engine"} / hikaricp_connections_max{job="intelbras-event-engine"} > 0.8
+        for: 5m
+        labels:
+          service: intelbras-event-engine
+          severity: warning
+        annotations:
+          summary: Hikari connection pool is heavily utilized
+          description: Active connections have remained above 80% of the configured pool maximum for five minutes.
+
+      - alert: IntelbrasHikariPoolExhausted
+        expr: hikaricp_connections_pending{job="intelbras-event-engine"} > 0 and hikaricp_connections_active{job="intelbras-event-engine"} >= hikaricp_connections_max{job="intelbras-event-engine"}
+        for: 2m
+        labels:
+          service: intelbras-event-engine
+          severity: critical
+        annotations:
+          summary: Hikari pool is exhausted and callers are waiting
+          description: Pending connection requests exist while active connections have reached the pool maximum.
+
+      - alert: IntelbrasKafkaConsumerLagPersistent
+        expr: max by(instance) (kafka_consumer_fetch_manager_records_lag_max{job="intelbras-event-engine",topic="device-events"}) > 0
+        for: 5m
+        labels:
+          service: intelbras-event-engine
+          severity: warning
+        annotations:
+          summary: Kafka consumer lag is persisting
+          description: The maximum lag for device-events has remained above zero for five minutes; the metric unit is records.
+
+      - alert: IntelbrasKafkaDeliveryFailuresRepeated
+        expr: increase(kafka_consumer_delivery_failure_total{job="intelbras-event-engine",topic="device-events"}[5m]) >= 3
+        for: 1m
+        labels:
+          service: intelbras-event-engine
+          severity: warning
+        annotations:
+          summary: Repeated Kafka event processing failures
+          description: At least three failed delivery attempts occurred within five minutes; DLT publication is alerted separately.
