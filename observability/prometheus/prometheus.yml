@@ -9,4 +9,4 @@ scrape_configs:
   - job_name: intelbras-event-engine
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["host.docker.internal:3000"]
+      - targets: ["app:3000"]

@@ -1,0 +1,10 @@
+services:
+  app:
+    profiles:
+      - container-app
+
+  prometheus:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./observability/prometheus/prometheus.dev.yml:/etc/prometheus/prometheus.yml:ro
