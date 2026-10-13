@@ -1,0 +1,22 @@
+groups:
+  - name: intelbras-event-engine
+    interval: 15s
+    rules:
+      - alert: IntelbrasApplicationUnavailable
+        expr: absent(up{job="intelbras-event-engine"}) or up{job="intelbras-event-engine"} == 0
+        for: 1m
+        labels:
+          service: intelbras-event-engine
+          severity: critical
+        annotations:
+          summary: Intelbras Event Engine is unavailable
+          description: Prometheus cannot scrape the application on its configured target.
+
+      - alert: DeviceEventSentToDlt
+        expr: increase(kafka_consumer_dlt_total{job="intelbras-event-engine",topic="device-events",outcome="success"}[5m]) > 0
+        labels:
+          service: intelbras-event-engine
+          severity: warning
+        annotations:
+          summary: A device event was sent to the dead-letter topic
+          description: At least one event was successfully recovered to the DLT during the last five minutes.
