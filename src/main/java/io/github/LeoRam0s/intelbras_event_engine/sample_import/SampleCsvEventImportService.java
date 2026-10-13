@@ -1,6 +1,6 @@
 package io.github.LeoRam0s.intelbras_event_engine.sample_import;
 
-import io.github.LeoRam0s.intelbras_event_engine.device_event.DeviceEventProducer;
+import io.github.LeoRam0s.intelbras_event_engine.device_event.kafka.DeviceEventProducer;
 import io.github.LeoRam0s.intelbras_event_engine.device_event.IdempotencyKeyGenerator;
 import io.github.LeoRam0s.intelbras_event_engine.device_event.dto.DeviceEventDto;
 import io.github.LeoRam0s.intelbras_event_engine.sample_import.exceptions.CsvSampleImportException;

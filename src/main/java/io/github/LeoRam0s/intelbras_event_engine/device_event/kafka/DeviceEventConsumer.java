@@ -1,5 +1,6 @@
-package io.github.LeoRam0s.intelbras_event_engine.device_event;
+package io.github.LeoRam0s.intelbras_event_engine.device_event.kafka;
 
+import io.github.LeoRam0s.intelbras_event_engine.device_event.DeviceEventService;
 import io.github.LeoRam0s.intelbras_event_engine.device_event.dto.DeviceEventDto;
 import io.github.LeoRam0s.intelbras_event_engine.device_event.observability.DeviceEventMetrics;
 import io.micrometer.core.instrument.Timer;
