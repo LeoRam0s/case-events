@@ -1,0 +1,27 @@
+package io.github.LeoRam0s.intelbras.deviceevent;
+
+import io.github.LeoRam0s.intelbras.deviceevent.dto.DeviceEventDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class DeviceEventService {
+    private static final Logger log = LoggerFactory.getLogger(DeviceEventService.class);
+
+    private final DeviceEventRepository deviceEventRepository;
+
+    public DeviceEventService(DeviceEventRepository deviceEventRepository) {
+        this.deviceEventRepository = deviceEventRepository;
+    }
+
+    @Transactional
+    public boolean process(DeviceEventDto event) {
+        log.atDebug()
+                .addKeyValue("eventId", event.eventId())
+                .log("Processing event");
+
+        return deviceEventRepository.insertConsumeEventIfAbsent(event);
+    }
+}
