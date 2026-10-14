@@ -56,7 +56,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:${APP_HOST_PORT:-3000}:3000"
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:19092
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-intelbrasdb}
@@ -74,7 +74,7 @@ services:
   prometheus:
     image: prom/prometheus:v3.15.0
     ports:
-      - "127.0.0.1:9090:9090"
+      - "127.0.0.1:${PROMETHEUS_PORT:-9090}:9090"
     volumes:
       - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./observability/prometheus/alert-rules.yml:/etc/prometheus/alert-rules.yml:ro
@@ -85,7 +85,7 @@ services:
     environment:
       GF_PLUGINS_PREINSTALL_DISABLED: "true"
     ports:
-      - "127.0.0.1:3001:3000"
+      - "127.0.0.1:${GRAFANA_PORT:-3001}:3000"
     volumes:
       - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
       - ./observability/grafana/dashboards:/etc/grafana/dashboards:ro
@@ -95,7 +95,7 @@ services:
     image: grafana/loki:3.7.8
     command: ["-config.file=/etc/loki/loki.yaml"]
     ports:
-      - "127.0.0.1:3100:3100"
+      - "127.0.0.1:${LOKI_PORT:-3100}:3100"
     volumes:
       - ./observability/loki/loki.yaml:/etc/loki/loki.yaml:ro
       - loki_data:/loki
@@ -110,7 +110,7 @@ services:
     depends_on:
       - loki
     ports:
-      - "127.0.0.1:12345:12345"
+      - "127.0.0.1:${ALLOY_PORT:-12345}:12345"
     volumes:
       - ./observability/alloy/config.alloy:/etc/alloy/config.alloy:ro
       - ./logs:/var/log/intelbras-event-engine:ro
