@@ -28,7 +28,8 @@ public class DeviceEventConsumer {
     @KafkaListener(
             id = "deviceEventConsumer",
             topics = "${app.kafka.topics.device-events.name:device-events}",
-            groupId = "${spring.application.name}"
+            groupId = "${spring.application.name}",
+            concurrency = "3"
     )
     public void consume(ConsumerRecord<String, DeviceEventDto> record) {
         deviceEventMetrics.recordConsumed();
